@@ -1,0 +1,6 @@
+@JobBank_HostAddress = http://localhost:5190
+
+GET {{JobBank_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
