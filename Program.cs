@@ -1,10 +1,12 @@
 using JobBank.Core.Config;
+using JobBank.Core.Repositories.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.RegisterDatabase(builder.Configuration);
+builder.Services.AddScoped<IJobRepository, JobRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
