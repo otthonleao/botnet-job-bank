@@ -1,0 +1,26 @@
+services:
+  database:
+    image: postgres:17.0-alpine3.20
+    container_name: dev-postgresql
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_DB: dotnet-job-bank_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"     # Limita o uso de CPU a 50%
+          memory: "512M"  # Limita a memória a 512 MB
+
+volumes:
+  db-data:
+    
+networks:
+  dev-network:
+    driver: bridge
