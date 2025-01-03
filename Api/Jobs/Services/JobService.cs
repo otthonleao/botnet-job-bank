@@ -29,4 +29,9 @@ public class JobService : IJobService
         }
         return job;
     }
+
+    public Job Create(Job job)
+    {
+        return _jobRepository.Create(job);
+    }
 }
