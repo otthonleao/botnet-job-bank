@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JobBank.Core.Data.Migrations
 {
     [DbContext(typeof(JobBankDbContext))]
-    [Migration("20250102044154_CreateJobTable")]
+    [Migration("20250102081901_CreateJobTable")]
     partial class CreateJobTable
     {
         /// <inheritdoc />
