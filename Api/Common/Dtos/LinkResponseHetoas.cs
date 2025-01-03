@@ -6,7 +6,7 @@ public class LinkResponseHetoas
     public string Type { get; set; }
     public string Rel { get; set; }
     
-    public LinkResponseHetoas(string href, string type, string rel)
+    public LinkResponseHetoas(string? href, string type, string rel)
     {
         Href = href;
         Type = type;
