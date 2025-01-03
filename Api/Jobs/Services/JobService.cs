@@ -1,18 +1,20 @@
+using JobBank.Api.Jobs.Dtos;
+using JobBank.Api.Jobs.Mappers;
 using JobBank.Core.Exceptions;
 using JobBank.Core.Models;
 using JobBank.Core.Repositories.Jobs;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.Json;
 
 namespace JobBank.Api.Jobs.Services;
 
 public class JobService : IJobService
 {
     private readonly IJobRepository _jobRepository;
+    private readonly IJobMapper _jobMapper;
 
-    public JobService(IJobRepository jobRepository)
+    public JobService(IJobRepository jobRepository, IJobMapper jobMapper)
     {
         _jobRepository = jobRepository;
+        _jobMapper = jobMapper;
     }
 
     public ICollection<Job> FindAll()
@@ -30,9 +32,11 @@ public class JobService : IJobService
         return job;
     }
 
-    public Job Create(Job job)
+    public JobDetailResponse Create(JobRequest jobRequest)
     {
-        return _jobRepository.Create(job);
+        var job = _jobMapper.ToJob(jobRequest);
+        var createdJob = _jobRepository.Create(job);
+        return _jobMapper.ToDetailResponse(createdJob);
     }
     
     public Job Update(int id, Job job)
