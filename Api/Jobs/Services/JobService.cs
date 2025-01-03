@@ -24,14 +24,14 @@ public class JobService : IJobService
             .ToList();
     }
     
-    public Job FindById(int id)
+    public JobDetailResponse FindById(int id)
     {
         var job = _jobRepository.FindById(id);
         if (job is null)
         {
             throw new ModelNotFoundException($"Job with id {id} not found");
         }
-        return job;
+        return _jobMapper.ToDetailResponse(job);
     }
 
     public JobDetailResponse Create(JobRequest jobRequest)
