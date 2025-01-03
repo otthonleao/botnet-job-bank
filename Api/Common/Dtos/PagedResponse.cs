@@ -1,6 +1,8 @@
+using JobBank.Api.Jobs.Common;
+
 namespace JobBank.Api.Jobs.Dtos;
 
-public class PagedResponse<R>
+public class PagedResponse<R> : ResourceResponseHetoas
 {
     public ICollection<R> Items { get; set; } = new List<R>();
     public int PageNumber { get; set; }
