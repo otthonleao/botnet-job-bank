@@ -12,11 +12,13 @@ public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
     private readonly IAssemblerHetoas<JobSummaryResponse> _jobSummaryAssemblerHetoas;
+    private readonly IAssemblerHetoas<JobDetailResponse> _jobDetailAssemblerHetoas;
 
-    public JobController(IJobService jobService, IAssemblerHetoas<JobSummaryResponse> jobSummaryAssemblerHetoas)
+    public JobController(IJobService jobService, IAssemblerHetoas<JobSummaryResponse> jobSummaryAssemblerHetoas, IAssemblerHetoas<JobDetailResponse> jobDetailAssemblerHetoas)
     {
         _jobService = jobService;
         _jobSummaryAssemblerHetoas = jobSummaryAssemblerHetoas;
+        _jobDetailAssemblerHetoas = jobDetailAssemblerHetoas;
     }
     
     [HttpGet(Name = "FindAllJobs")]
@@ -32,10 +34,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.FindById(id));
         var body = _jobService.FindById(id);
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "GET", "self"));
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "PUT", "update"));
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "DELETE", "delete"));
-        return Ok(body);
+        return Ok(_jobDetailAssemblerHetoas.ToResourceResponseHetoas(body, HttpContext));
     }
     
     [HttpPost(Name = "CreateJob")]
@@ -43,10 +42,11 @@ public class JobController : ControllerBase
     {
         // return Created($"/api/jobs/{body.Id}", _jobService.Create(jobRequest));
         var body = _jobService.Create(jobRequest);
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "GET", "self"));
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "PUT", "update"));
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "DELETE", "delete"));
-        return CreatedAtAction(nameof(FindById), new { id = body.Id }, body);
+        return CreatedAtAction(
+            nameof(FindById),
+            new { id = body.Id },
+            _jobDetailAssemblerHetoas.ToResourceResponseHetoas(body, HttpContext)
+        );
     }
     
     [HttpPut("{id}", Name = "UpdateJob")]
@@ -54,10 +54,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.Update(id, jobRequest));
         var body = _jobService.Update(id, jobRequest);
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "GET", "self"));
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "PUT", "update"));
-        body.AddLink(new LinkResponseHetoas($"/api/jobs/{body.Id}", "DELETE", "delete"));
-        return Ok(body);
+        return Ok(_jobDetailAssemblerHetoas.ToResourceResponseHetoas(body, HttpContext));
     }
     
     [HttpDelete("{id}", Name = "DeleteJob")]
