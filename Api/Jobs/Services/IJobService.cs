@@ -7,4 +7,5 @@ public interface IJobService
     ICollection<Job> FindAll();
     Job FindById(int id);
     Job Create(Job job);
+    Job Update(int id, Job job);
 }
