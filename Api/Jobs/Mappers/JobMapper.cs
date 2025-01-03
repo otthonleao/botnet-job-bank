@@ -25,7 +25,7 @@ public class JobMapper : IJobMapper
         };
     }
 
-    public Job ToJob(JobRequest jobRequest)
+    public Job ToModel(JobRequest jobRequest)
     {
         return new Job()
         {

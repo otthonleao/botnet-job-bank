@@ -7,5 +7,5 @@ public interface IJobMapper
 {
     JobSummaryResponse ToSummaryResponse(Job job);
     JobDetailResponse ToDetailResponse(Job job);
-    Job ToJob(JobRequest jobRequest);
+    Job ToModel(JobRequest jobRequest);
 }
