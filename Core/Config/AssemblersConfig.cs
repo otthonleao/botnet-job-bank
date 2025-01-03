@@ -10,5 +10,6 @@ public static class AssemblersConfig
     {
         services.AddScoped<IAssemblerHetoas<JobSummaryResponse>, JobSummaryAssemblerHetoas>();
         services.AddScoped<IAssemblerHetoas<JobDetailResponse>, JobDetailAssemblerHetoas>();
+        services.AddScoped<IPagedAssemblerHateoas<JobSummaryResponse>, JobSummaryPagedAssemblerHeteoas>();
     }
 }
