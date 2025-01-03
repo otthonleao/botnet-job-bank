@@ -8,10 +8,16 @@ namespace JobBank.Core.Middlewares;
 public class ExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
     
     public ExceptionHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
+        _jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
     }
     
     public async Task Invoke(HttpContext context)
@@ -47,7 +53,7 @@ public class ExceptionHandlerMiddleware
         };
         context.Response.StatusCode = body.Status;
         context.Response.ContentType = "application/json";
-        return context.Response.WriteAsync(JsonSerializer.Serialize(body));
+        return context.Response.WriteAsync(JsonSerializer.Serialize(body, _jsonSerializerOptions));
     }
 
     private Task HandleModelNotFoundExceptionAsync(HttpContext context, ModelNotFoundException ex)
@@ -62,6 +68,6 @@ public class ExceptionHandlerMiddleware
         };
         context.Response.StatusCode = StatusCodes.Status404NotFound;
         context.Response.ContentType = "application/json";
-        return context.Response.WriteAsync(JsonSerializer.Serialize(body));
+        return context.Response.WriteAsync(JsonSerializer.Serialize(body, _jsonSerializerOptions));
     }
 }
