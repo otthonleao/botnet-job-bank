@@ -5,7 +5,7 @@ namespace JobBank.Api.Jobs.Services;
 
 public interface IJobService
 {
-    ICollection<Job> FindAll();
+    ICollection<JobSummaryResponse> FindAll();
     Job FindById(int id);
     JobDetailResponse Create(JobRequest jobRequest);
     Job Update(int id, Job job);

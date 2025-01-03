@@ -17,9 +17,11 @@ public class JobService : IJobService
         _jobMapper = jobMapper;
     }
 
-    public ICollection<Job> FindAll()
+    public ICollection<JobSummaryResponse> FindAll()
     {
-        return _jobRepository.FindAll();
+        return _jobRepository.FindAll()
+            .Select(job => _jobMapper.ToSummaryResponse(job))
+            .ToList();
     }
     
     public Job FindById(int id)
