@@ -2,7 +2,7 @@ using JobBank.Api.Jobs.Common;
 
 namespace JobBank.Api.Common.Assemblers;
 
-public interface IAssemblerHetoas<T> where T : ResourceResponseHetoas
+public interface IAssemblerHateoas<T> where T : ResourceResponseHateoas
 {
     T ToResourceResponseHetoas(T resource, HttpContext context);
 

@@ -8,8 +8,8 @@ public static class AssemblersConfig
 {
     public static void RegisterAssemblers(this IServiceCollection services)
     {
-        services.AddScoped<IAssemblerHetoas<JobSummaryResponse>, JobSummaryAssemblerHetoas>();
-        services.AddScoped<IAssemblerHetoas<JobDetailResponse>, JobDetailAssemblerHetoas>();
-        services.AddScoped<IPagedAssemblerHateoas<JobSummaryResponse>, JobSummaryPagedAssemblerHeteoas>();
+        services.AddScoped<IAssemblerHateoas<JobSummaryResponse>, JobSummaryAssemblerHateoas>();
+        services.AddScoped<IAssemblerHateoas<JobDetailResponse>, JobDetailAssemblerHateoas>();
+        services.AddScoped<IPagedAssemblerHateoas<JobSummaryResponse>, JobSummaryPagedAssemblerHateoas>();
     }
 }

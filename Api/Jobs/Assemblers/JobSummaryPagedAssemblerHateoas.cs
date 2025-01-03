@@ -4,41 +4,41 @@ using JobBank.Api.Jobs.Dtos;
 
 namespace JobBank.Api.Jobs.Assemblers;
 
-public class JobSummaryPagedAssemblerHeteoas : IPagedAssemblerHateoas<JobSummaryResponse>
+public class JobSummaryPagedAssemblerHateoas : IPagedAssemblerHateoas<JobSummaryResponse>
 {
 
     private readonly LinkGenerator _linkGenerator;
-    private readonly IAssemblerHetoas<JobSummaryResponse> _jobSummaryAssemblerHetoas;
+    private readonly IAssemblerHateoas<JobSummaryResponse> _jobSummaryAssemblerHateoas;
 
-    public JobSummaryPagedAssemblerHeteoas(LinkGenerator linkGenerator, IAssemblerHetoas<JobSummaryResponse> jobSummaryAssemblerHetoas)
+    public JobSummaryPagedAssemblerHateoas(LinkGenerator linkGenerator, IAssemblerHateoas<JobSummaryResponse> jobSummaryAssemblerHateoas)
     {
         _linkGenerator = linkGenerator;
-        _jobSummaryAssemblerHetoas = jobSummaryAssemblerHetoas;
+        _jobSummaryAssemblerHateoas = jobSummaryAssemblerHateoas;
     }
 
 
     public PagedResponse<JobSummaryResponse> ToPagedResource(PagedResponse<JobSummaryResponse> pagedResource, HttpContext context)
     {
         // Montando os links internos
-        pagedResource.Items = _jobSummaryAssemblerHetoas.ToResourceCollection(pagedResource.Items, context);
+        pagedResource.Items = _jobSummaryAssemblerHateoas.ToResourceCollection(pagedResource.Items, context);
         
         // Montando os links da própria paginação
-        var firstPageLink = new LinkResponseHetoas(
+        var firstPageLink = new LinkResponseHateoas(
             _linkGenerator.GetUriByName(context, "FindAllJobs", new { page = pagedResource.FirstPage, size = pagedResource.PageSize }),
             "GET",
             "firstPage"
         );
-        var lastPageLink = new LinkResponseHetoas(
+        var lastPageLink = new LinkResponseHateoas(
             _linkGenerator.GetUriByName(context, "FindAllJobs", new { page = pagedResource.LastPage, size = pagedResource.PageSize }),
             "GET",
             "lastPage"
         );
-        var nextPageLink = new LinkResponseHetoas(
+        var nextPageLink = new LinkResponseHateoas(
             _linkGenerator.GetUriByName(context, "FindAllJobs", new { page = pagedResource.PageNumber + 1, size = pagedResource.PageSize }),
             "GET",
             "nextPage"
         );
-        var previousPageLink = new LinkResponseHetoas(
+        var previousPageLink = new LinkResponseHateoas(
             _linkGenerator.GetUriByName(context, "FindAllJobs", new { page = pagedResource.PageNumber - 1, size = pagedResource.PageSize }),
             "GET",
             "previousPage"
