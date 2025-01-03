@@ -16,4 +16,12 @@ public class ResourceResponseHetoas
             Links.Add(link);
         }
     }
+    
+    public void AddLinkIf(bool condition, LinkResponseHetoas link)
+    {
+        if (condition)
+        {
+            Links.Add(link);
+        }
+    }
 }
