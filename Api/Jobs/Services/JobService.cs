@@ -44,4 +44,14 @@ public class JobService : IJobService
         job.Id = id;
         return _jobRepository.Update(job);
     }
+    
+    public void Delete(int id)
+    {
+        if (!_jobRepository.ExistsById(id))
+        {
+            throw new ModelNotFoundException($"Job with id {id} not found");
+        }
+        
+        _jobRepository.DeleteById(id);
+    }
 }

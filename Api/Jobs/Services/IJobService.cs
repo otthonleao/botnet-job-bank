@@ -8,4 +8,5 @@ public interface IJobService
     Job FindById(int id);
     Job Create(Job job);
     Job Update(int id, Job job);
+    void Delete(int id);
 }
