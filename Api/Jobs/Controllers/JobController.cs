@@ -22,6 +22,7 @@ public class JobController : ControllerBase
     }
     
     [HttpGet(Name = "FindAllJobs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<JobSummaryResponse>))]
     public IActionResult FindAll([FromQuery] int page, [FromQuery] int size)
     {
         // return Ok(_jobService.FindAll());
@@ -31,6 +32,8 @@ public class JobController : ControllerBase
     }
     
     [HttpGet("{id}", Name = "FindJobById")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobDetailResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
     public IActionResult FindById([FromRoute] int id)
     {
         // return Ok(_jobService.FindById(id));
@@ -39,6 +42,8 @@ public class JobController : ControllerBase
     }
     
     [HttpPost(Name = "CreateJob")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(JobDetailResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
     public IActionResult Create([FromBody] JobRequest jobRequest)
     {
         // return Created($"/api/jobs/{body.Id}", _jobService.Create(jobRequest));
@@ -51,6 +56,9 @@ public class JobController : ControllerBase
     }
     
     [HttpPut("{id}", Name = "UpdateJob")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobDetailResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
     public IActionResult Update([FromRoute] int id, [FromBody] JobRequest jobRequest)
     {
         // return Ok(_jobService.Update(id, jobRequest));
@@ -59,6 +67,8 @@ public class JobController : ControllerBase
     }
     
     [HttpDelete("{id}", Name = "DeleteJob")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
     public IActionResult Delete([FromRoute] int id)
     {
         _jobService.Delete(id);
