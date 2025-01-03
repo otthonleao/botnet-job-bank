@@ -40,4 +40,11 @@ public class JobController : ControllerBase
     {
         return Ok(_jobService.Update(id, job));
     }
+    
+    [HttpDelete("{id}")]
+    public IActionResult Delete([FromRoute] int id)
+    {
+        _jobService.Delete(id);
+        return NoContent();
+    }
 }
