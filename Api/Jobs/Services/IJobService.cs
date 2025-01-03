@@ -8,6 +8,6 @@ public interface IJobService
     ICollection<JobSummaryResponse> FindAll();
     JobDetailResponse FindById(int id);
     JobDetailResponse Create(JobRequest jobRequest);
-    Job Update(int id, Job job);
+    JobDetailResponse Update(int id, JobRequest jobRequest);
     void Delete(int id);
 }

@@ -1,6 +1,5 @@
 using JobBank.Api.Jobs.Dtos;
 using JobBank.Api.Jobs.Services;
-using JobBank.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobBank.Api.Jobs.Controllers;
@@ -37,9 +36,9 @@ public class JobController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public IActionResult Update([FromRoute] int id, [FromBody] Job job)
+    public IActionResult Update([FromRoute] int id, [FromBody] JobRequest jobRequest)
     {
-        return Ok(_jobService.Update(id, job));
+        return Ok(_jobService.Update(id, jobRequest));
     }
     
     [HttpDelete("{id}")]

@@ -36,19 +36,21 @@ public class JobService : IJobService
 
     public JobDetailResponse Create(JobRequest jobRequest)
     {
-        var job = _jobMapper.ToJob(jobRequest);
+        var job = _jobMapper.ToModel(jobRequest);
         var createdJob = _jobRepository.Create(job);
         return _jobMapper.ToDetailResponse(createdJob);
     }
     
-    public Job Update(int id, Job job)
+    public JobDetailResponse Update(int id, JobRequest jobRequest)
     {
         if (!_jobRepository.ExistsById(id))
         {
             throw new ModelNotFoundException($"Job with id {id} not found");
         }
-        job.Id = id;
-        return _jobRepository.Update(job);
+        var jobToUpdate = _jobMapper.ToModel(jobRequest);
+        jobToUpdate.Id = id;
+        var updatedJob = _jobRepository.Update(jobToUpdate);
+        return _jobMapper.ToDetailResponse(updatedJob);
     }
     
     public void Delete(int id)
