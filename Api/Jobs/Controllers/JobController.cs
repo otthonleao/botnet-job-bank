@@ -1,3 +1,4 @@
+using JobBank.Api.Common.Assemblers;
 using JobBank.Api.Jobs.Common;
 using JobBank.Api.Jobs.Dtos;
 using JobBank.Api.Jobs.Services;
@@ -10,12 +11,12 @@ namespace JobBank.Api.Jobs.Controllers;
 public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IAssemblerHetoas<JobSummaryResponse> _jobSummaryAssemblerHetoas;
 
-    public JobController(IJobService jobService, LinkGenerator linkGenerator)
+    public JobController(IJobService jobService, IAssemblerHetoas<JobSummaryResponse> jobSummaryAssemblerHetoas)
     {
         _jobService = jobService;
-        _linkGenerator = linkGenerator;
+        _jobSummaryAssemblerHetoas = jobSummaryAssemblerHetoas;
     }
     
     [HttpGet(Name = "FindAllJobs")]
@@ -23,24 +24,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.FindAll());
         var body = _jobService.FindAll();
-        foreach (var resource in body)
-        {
-            var selfLink = new LinkResponseHetoas(
-                _linkGenerator.GetUriByName(HttpContext, "FindJobById", new { Id = resource.Id }),
-                "GET", 
-                "self"
-                );
-            var updateLink = new LinkResponseHetoas(
-                _linkGenerator.GetUriByName(HttpContext, "UpdateJob", new { Id = resource.Id }),
-                "PUT",
-                "update");
-            var deleteLink = new LinkResponseHetoas(
-                _linkGenerator.GetUriByName(HttpContext, "DeleteJob", new { Id = resource.Id }),
-                "DELETE", 
-                "delete");
-            resource.AddLinks(selfLink, updateLink, deleteLink);
-        }
-        return Ok(body);
+        return Ok(_jobSummaryAssemblerHetoas.ToResourceCollection(body, HttpContext));
     }
     
     [HttpGet("{id}", Name = "FindJobById")]
