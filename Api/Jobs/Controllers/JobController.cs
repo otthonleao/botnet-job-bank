@@ -22,11 +22,12 @@ public class JobController : ControllerBase
     }
     
     [HttpGet(Name = "FindAllJobs")]
-    public IActionResult FindAll()
+    public IActionResult FindAll([FromQuery] int page, [FromQuery] int size)
     {
         // return Ok(_jobService.FindAll());
-        var body = _jobService.FindAll();
-        return Ok(_jobSummaryAssemblerHetoas.ToResourceCollection(body, HttpContext));
+        var body = _jobService.FindAll(page, size);
+        // return Ok(_jobSummaryAssemblerHetoas.ToResourceCollection(body, HttpContext));
+        return Ok(body);
     }
     
     [HttpGet("{id}", Name = "FindJobById")]
