@@ -1,4 +1,5 @@
 using System.Text.Json;
+using FluentValidation;
 using JobBank.Api.Jobs.Common;
 using JobBank.Core.Exceptions;
 
@@ -23,6 +24,30 @@ public class ExceptionHandlerMiddleware
         {
             await HandleModelNotFoundExceptionAsync(context, ex);
         }
+        catch (ValidationException ex)
+        {
+            await HandleFluentValidationExceptionAsync(context, ex);
+        }
+    }
+
+    private Task HandleFluentValidationExceptionAsync(HttpContext context, ValidationException ex)
+    {
+        var body = new ValidationErrorResponse()
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Error = "Bad Request",
+            Cause = ex.GetType().Name,
+            Message = ex.Message,
+            Timestamp = DateTime.UtcNow,
+            Errors = ex.Errors
+                .GroupBy(vf => vf.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(vf => vf.ErrorMessage).ToArray())
+        };
+        context.Response.StatusCode = body.Status;
+        context.Response.ContentType = "application/json";
+        return context.Response.WriteAsync(JsonSerializer.Serialize(body));
     }
 
     private Task HandleModelNotFoundExceptionAsync(HttpContext context, ModelNotFoundException ex)
