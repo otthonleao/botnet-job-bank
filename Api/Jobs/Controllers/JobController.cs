@@ -1,5 +1,5 @@
+using JobBank.Api.Jobs.Dtos;
 using JobBank.Api.Jobs.Services;
-using JobBank.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobBank.Api.Jobs.Controllers;
@@ -28,17 +28,17 @@ public class JobController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult Create([FromBody] Job job)
+    public IActionResult Create([FromBody] JobRequest jobRequest)
     {
-        var body = _jobService.Create(job);
-        // return Created($"/api/jobs/{body.Id}", _jobService.Create(job));
+        var body = _jobService.Create(jobRequest);
+        // return Created($"/api/jobs/{body.Id}", _jobService.Create(jobRequest));
         return CreatedAtAction(nameof(FindById), new { id = body.Id }, body);
     }
     
     [HttpPut("{id}")]
-    public IActionResult Update([FromRoute] int id, [FromBody] Job job)
+    public IActionResult Update([FromRoute] int id, [FromBody] JobRequest jobRequest)
     {
-        return Ok(_jobService.Update(id, job));
+        return Ok(_jobService.Update(id, jobRequest));
     }
     
     [HttpDelete("{id}")]
