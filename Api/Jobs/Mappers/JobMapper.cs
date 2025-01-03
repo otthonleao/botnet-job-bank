@@ -1,5 +1,6 @@
 using JobBank.Api.Jobs.Dtos;
 using JobBank.Core.Models;
+using JobBank.Core.Repositories;
 
 namespace JobBank.Api.Jobs.Mappers;
 
@@ -25,6 +26,22 @@ public class JobMapper : IJobMapper
         };
     }
 
+    public PagedResponse<JobSummaryResponse> ToPagedSummaryResponse(PagedResult<Job> pagedResult)
+    {
+        return new PagedResponse<JobSummaryResponse>
+        {
+            Items = pagedResult.Items.Select(ToSummaryResponse).ToList(),
+            PageNumber = pagedResult.PageNumber,
+            PageSize = pagedResult.PageSize,
+            FirstPage = pagedResult.FirstPage,
+            LastPage = pagedResult.LastPage,
+            TotalPages = pagedResult.TotalPages,
+            TotalElements = pagedResult.TotalElements,
+            HasPreviousPage = pagedResult.HasPreviousPage,
+            HasNextPage = pagedResult.HasNextPage
+        };
+    }
+
     public Job ToModel(JobRequest jobRequest)
     {
         return new Job()
@@ -34,4 +51,6 @@ public class JobMapper : IJobMapper
             Requirements = string.Join(";", jobRequest.Requirements)
         };
     }
+    
+    
 }

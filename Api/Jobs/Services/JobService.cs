@@ -3,6 +3,7 @@ using JobBank.Api.Jobs.Dtos;
 using JobBank.Api.Jobs.Mappers;
 using JobBank.Core.Exceptions;
 using JobBank.Core.Models;
+using JobBank.Core.Repositories;
 using JobBank.Core.Repositories.Jobs;
 
 namespace JobBank.Api.Jobs.Services;
@@ -26,7 +27,14 @@ public class JobService : IJobService
             .Select(job => _jobMapper.ToSummaryResponse(job))
             .ToList();
     }
-    
+
+    public PagedResponse<JobSummaryResponse> FindAll(int page, int size)
+    {
+        var paginationOption = new PaginationOptions(page, size);
+        var pagedResult = _jobRepository.FindAll(paginationOption);
+        return _jobMapper.ToPagedSummaryResponse(pagedResult);
+    }
+
     public JobDetailResponse FindById(int id)
     {
         var job = _jobRepository.FindById(id);
