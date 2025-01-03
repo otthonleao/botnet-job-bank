@@ -25,4 +25,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.RegisterMiddlewares();
+
 app.Run();
