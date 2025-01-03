@@ -10,28 +10,40 @@ namespace JobBank.Api.Jobs.Controllers;
 public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
+    private readonly LinkGenerator _linkGenerator;
 
-    public JobController(IJobService jobService)
+    public JobController(IJobService jobService, LinkGenerator linkGenerator)
     {
         _jobService = jobService;
+        _linkGenerator = linkGenerator;
     }
     
-    [HttpGet]
+    [HttpGet(Name = "FindAllJobs")]
     public IActionResult FindAll()
     {
         // return Ok(_jobService.FindAll());
         var body = _jobService.FindAll();
         foreach (var resource in body)
         {
-            var selfLink = new LinkResponseHetoas($"/api/jobs/{resource.Id}", "GET", "self");
-            var updateLink = new LinkResponseHetoas($"/api/jobs/{resource.Id}", "PUT", "update");
-            var deleteLink = new LinkResponseHetoas($"/api/jobs/{resource.Id}", "DELETE", "delete");
+            var selfLink = new LinkResponseHetoas(
+                _linkGenerator.GetUriByName(HttpContext, "FindJobById", new { Id = resource.Id }),
+                "GET", 
+                "self"
+                );
+            var updateLink = new LinkResponseHetoas(
+                _linkGenerator.GetUriByName(HttpContext, "UpdateJob", new { Id = resource.Id }),
+                "PUT",
+                "update");
+            var deleteLink = new LinkResponseHetoas(
+                _linkGenerator.GetUriByName(HttpContext, "DeleteJob", new { Id = resource.Id }),
+                "DELETE", 
+                "delete");
             resource.AddLinks(selfLink, updateLink, deleteLink);
         }
         return Ok(body);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "FindJobById")]
     public IActionResult FindById([FromRoute] int id)
     {
         // return Ok(_jobService.FindById(id));
@@ -42,7 +54,7 @@ public class JobController : ControllerBase
         return Ok(body);
     }
     
-    [HttpPost]
+    [HttpPost(Name = "CreateJob")]
     public IActionResult Create([FromBody] JobRequest jobRequest)
     {
         // return Created($"/api/jobs/{body.Id}", _jobService.Create(jobRequest));
@@ -53,7 +65,7 @@ public class JobController : ControllerBase
         return CreatedAtAction(nameof(FindById), new { id = body.Id }, body);
     }
     
-    [HttpPut("{id}")]
+    [HttpPut("{id}", Name = "UpdateJob")]
     public IActionResult Update([FromRoute] int id, [FromBody] JobRequest jobRequest)
     {
         // return Ok(_jobService.Update(id, jobRequest));
@@ -64,7 +76,7 @@ public class JobController : ControllerBase
         return Ok(body);
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}", Name = "DeleteJob")]
     public IActionResult Delete([FromRoute] int id)
     {
         _jobService.Delete(id);
