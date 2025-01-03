@@ -26,7 +26,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.FindAll());
         var body = _jobService.FindAll(page, size);
-        // return Ok(_jobSummaryAssemblerHetoas.ToResourceCollection(body, HttpContext));
+        body.Items = _jobSummaryAssemblerHetoas.ToResourceCollection(body.Items, HttpContext);
         return Ok(body);
     }
     
