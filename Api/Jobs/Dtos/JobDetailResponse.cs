@@ -2,7 +2,7 @@ using JobBank.Api.Jobs.Common;
 
 namespace JobBank.Api.Jobs.Dtos;
 
-public class JobDetailResponse : ResourceResponseHetoas
+public class JobDetailResponse : ResourceResponseHateoas
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;

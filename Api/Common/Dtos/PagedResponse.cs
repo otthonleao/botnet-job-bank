@@ -3,7 +3,7 @@ using JobBank.Api.Jobs.Common;
 
 namespace JobBank.Api.Jobs.Dtos;
 
-public class PagedResponse<R> : ResourceResponseHetoas
+public class PagedResponse<R> : ResourceResponseHateoas
 {
     public ICollection<R> Items { get; set; } = new List<R>();
     [JsonIgnore]

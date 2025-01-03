@@ -11,14 +11,14 @@ namespace JobBank.Api.Jobs.Controllers;
 public class JobController : ControllerBase
 {
     private readonly IJobService _jobService;
-    private readonly IAssemblerHetoas<JobSummaryResponse> _jobSummaryAssemblerHetoas;
-    private readonly IAssemblerHetoas<JobDetailResponse> _jobDetailAssemblerHetoas;
+    private readonly IAssemblerHateoas<JobSummaryResponse> _jobSummaryAssemblerHateoas;
+    private readonly IAssemblerHateoas<JobDetailResponse> _jobDetailAssemblerHateoas;
 
-    public JobController(IJobService jobService, IAssemblerHetoas<JobSummaryResponse> jobSummaryAssemblerHetoas, IAssemblerHetoas<JobDetailResponse> jobDetailAssemblerHetoas)
+    public JobController(IJobService jobService, IAssemblerHateoas<JobSummaryResponse> jobSummaryAssemblerHateoas, IAssemblerHateoas<JobDetailResponse> jobDetailAssemblerHateoas)
     {
         _jobService = jobService;
-        _jobSummaryAssemblerHetoas = jobSummaryAssemblerHetoas;
-        _jobDetailAssemblerHetoas = jobDetailAssemblerHetoas;
+        _jobSummaryAssemblerHateoas = jobSummaryAssemblerHateoas;
+        _jobDetailAssemblerHateoas = jobDetailAssemblerHateoas;
     }
     
     [HttpGet(Name = "FindAllJobs")]
@@ -26,7 +26,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.FindAll());
         var body = _jobService.FindAll(page, size);
-        body.Items = _jobSummaryAssemblerHetoas.ToResourceCollection(body.Items, HttpContext);
+        body.Items = _jobSummaryAssemblerHateoas.ToResourceCollection(body.Items, HttpContext);
         return Ok(body);
     }
     
@@ -35,7 +35,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.FindById(id));
         var body = _jobService.FindById(id);
-        return Ok(_jobDetailAssemblerHetoas.ToResourceResponseHetoas(body, HttpContext));
+        return Ok(_jobDetailAssemblerHateoas.ToResourceResponseHetoas(body, HttpContext));
     }
     
     [HttpPost(Name = "CreateJob")]
@@ -46,7 +46,7 @@ public class JobController : ControllerBase
         return CreatedAtAction(
             nameof(FindById),
             new { id = body.Id },
-            _jobDetailAssemblerHetoas.ToResourceResponseHetoas(body, HttpContext)
+            _jobDetailAssemblerHateoas.ToResourceResponseHetoas(body, HttpContext)
         );
     }
     
@@ -55,7 +55,7 @@ public class JobController : ControllerBase
     {
         // return Ok(_jobService.Update(id, jobRequest));
         var body = _jobService.Update(id, jobRequest);
-        return Ok(_jobDetailAssemblerHetoas.ToResourceResponseHetoas(body, HttpContext));
+        return Ok(_jobDetailAssemblerHateoas.ToResourceResponseHetoas(body, HttpContext));
     }
     
     [HttpDelete("{id}", Name = "DeleteJob")]
