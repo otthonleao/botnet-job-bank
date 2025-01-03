@@ -8,6 +8,7 @@ builder.Services.RegisterDatabase(builder.Configuration);
 builder.Services.RegisterRepositories();
 builder.Services.RegisterServices();
 builder.Services.RegisterMappers();
+builder.Services.RegisterValidators();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

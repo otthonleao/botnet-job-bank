@@ -1,3 +1,4 @@
+using FluentValidation;
 using JobBank.Api.Jobs.Dtos;
 using JobBank.Api.Jobs.Mappers;
 using JobBank.Core.Exceptions;
@@ -10,11 +11,13 @@ public class JobService : IJobService
 {
     private readonly IJobRepository _jobRepository;
     private readonly IJobMapper _jobMapper;
+    private readonly IValidator<JobRequest> _jobRequestValidator;
 
-    public JobService(IJobRepository jobRepository, IJobMapper jobMapper)
+    public JobService(IJobRepository jobRepository, IJobMapper jobMapper, IValidator<JobRequest> jobRequestValidator)
     {
         _jobRepository = jobRepository;
         _jobMapper = jobMapper;
+        _jobRequestValidator = jobRequestValidator;
     }
 
     public ICollection<JobSummaryResponse> FindAll()
@@ -36,6 +39,7 @@ public class JobService : IJobService
 
     public JobDetailResponse Create(JobRequest jobRequest)
     {
+        _jobRequestValidator.ValidateAsync(jobRequest);
         var job = _jobMapper.ToModel(jobRequest);
         var createdJob = _jobRepository.Create(job);
         return _jobMapper.ToDetailResponse(createdJob);
@@ -43,6 +47,7 @@ public class JobService : IJobService
     
     public JobDetailResponse Update(int id, JobRequest jobRequest)
     {
+        _jobRequestValidator.ValidateAsync(jobRequest);
         if (!_jobRepository.ExistsById(id))
         {
             throw new ModelNotFoundException($"Job with id {id} not found");
